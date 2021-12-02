@@ -26,8 +26,8 @@ def keyboard_tele():
     rollNeg = SetVelocity("Negative Roll Velocity", "roll", -45.0)
     stopRoll = StopAxis("Roll Stop", "roll")
     
-    clawPos = SetVelocity("Positive Claw Velocity", "claw", 60)
-    clawNeg = SetVelocity("Negative Claw Velocity", "claw", -60)
+    clawPos = SetVelocity("Positive Claw Velocity", "claw", 0.5)
+    clawNeg = SetVelocity("Negative Claw Velocity", "claw", -0.5)
     stopClaw = StopAxis("Claw Stop", "claw")
     
     release_keyboard = ReleaseKeyboard("Release Keyboard")

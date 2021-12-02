@@ -155,6 +155,29 @@ class Scheduler():
         if Scheduler.__instance == None:
             Scheduler()
         return Scheduler.__instance
+
+class Notifier(object):
+    last_time = 0
+    def thread_func(self):
+        while self.running:
+            current = time.time()
+            if self.period - (current - self.last_time) <= 0:
+                for item in self.routine:
+                    item()
+                self.last_time = current
+    
+    def __init__(self, *args, period=0.02):
+        self.routine = args
+        self.period = period
+        self.running = False
+        self.thread = Thread(target=self.thread_func)
+    
+    def start(self):
+        self.thread.start()
+        self.running = True
+    
+    def stop(self):
+        self.running = False
     
 if __name__ == '__main__':
     

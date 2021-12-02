@@ -1,4 +1,4 @@
-from lib.commandlib import Scheduler, Subsystem
+from lib.commandlib import Notifier, Scheduler, Subsystem
 from lib.mathlib import Integral, polar_cart
 from robot.motors import HighTorqueServo, NormalServo
 from constants import min_ang, max_ang, lengths
@@ -51,6 +51,11 @@ def inverse(endX=0.0, endY=0.0, endZ=0.0, endBeta=0.0, endGamma=0.0):
 class Arm(Subsystem):
     __instance = None
     
+    def print_angles(self):
+        print(self.angles)
+        
+    printer=Notifier(print_angles, period=1.0)
+    
     vels = {
         'alpha':0.0,
         'beta':0.0,
@@ -85,6 +90,8 @@ class Arm(Subsystem):
         self.roll_integral = Integral(0.0)
         self.claw_integral = Integral(135.0)
         self.integrals = [self.alpha_integral, self.beta_integral, self.dist_integral, self.pitch_integral, self.roll_integral, self.claw_integral]
+        
+        self.printer.start()
         
     def setAngles(self, angles):
         for i in range(len(self.joints) - 1):
@@ -123,6 +130,9 @@ class Arm(Subsystem):
             self.setAngles(self.angles)
         except PoseOutsideReachException as e:
             print(str(e))
+    
+    def __del__(self):
+        self.printer.stop()
     
     @staticmethod 
     def getInstance():

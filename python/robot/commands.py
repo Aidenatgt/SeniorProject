@@ -1,4 +1,3 @@
-from typing import NamedTuple
 from lib.commandlib import Command, InstantCommand
 from robot.subsystems import Arm
 from lib.keyboard import KeyboardController
@@ -31,7 +30,7 @@ class SetVelocity(Command):
     
     def start(self):
         if self.axis == 'claw':
-            self.arm.setVels({self.axis: self.vel / 90.0})
+            self.arm.setVels({self.axis: self.vel * 90.0})
         else:
             self.arm.setVels({self.axis: self.vel})
     
@@ -66,4 +65,5 @@ class StopAxis(Command):
     
 class ReleaseKeyboard(InstantCommand):
     def start(self):
-        del KeyboardController.getInstance()
+        kb = KeyboardController.getInstance()
+        del kb

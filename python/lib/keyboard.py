@@ -26,7 +26,7 @@ class KeyboardController:
         last_states[val] = False
     
     def thread_func(self):
-        while True:
+        while not self.stop_thread:
             pressed = self.keyboard.getKeys()
             
             for key in self.states.keys():
@@ -66,6 +66,12 @@ class KeyboardController:
     def getState(self, key:str):
         return self.states[key]
     
+    def __del__(self):
+        del self.keyboard
+        self.stop_thread = True
+        del KeyboardController.__instance
+        
+    
     def __init__(self):
         """ Virtually private constructor. """
         if KeyboardController.__instance != None:
@@ -75,8 +81,9 @@ class KeyboardController:
         
         self.last_poll_time = time.time()
         
-        thread = Thread(target=self.thread_func)
-        thread.start()
+        self.stop_thread = True
+        self.thread = Thread(target=self.thread_func)
+        self.thread.start()
     
     @staticmethod 
     def getInstance():

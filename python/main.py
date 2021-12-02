@@ -1,9 +1,11 @@
-from lib.commandlib import Scheduler
 from lib.keyboard import KeyboardController
-from robot.commands import SetVelocity, StopAxis, TestCommand
-from robot.subsystems import Arm
-       
-if __name__ == "__main__":
+from robot.commands import ReleaseKeyboard, SetVelocity, StopAxis
+import sys
+
+def print_args():
+    print("help: Lists arguments and their functions (this is the help)\nktele: Runs a keyboard controlled tele-op.")
+    
+def keyboard_tele():
     betaPos = SetVelocity("Positive Beta Velocity", "beta", 50.0)
     betaNeg = SetVelocity("Negative Beta Velocity", "beta", -50.0)
     stopBeta = StopAxis("Beta Stop", "beta")
@@ -28,7 +30,7 @@ if __name__ == "__main__":
     clawNeg = SetVelocity("Negative Claw Velocity", "claw", -60)
     stopClaw = StopAxis("Claw Stop", "claw")
     
-    test = TestCommand("Test Command", "running")
+    release_keyboard = ReleaseKeyboard("Release Keyboard")
     
     kb = KeyboardController.getInstance()
     
@@ -61,3 +63,14 @@ if __name__ == "__main__":
     kb.whenReleased('u', stopClaw)
     kb.whenPressed('o', clawNeg)
     kb.whenReleased('o', stopClaw)
+    
+    kb.whenPressed('esc', release_keyboard)
+       
+ops = {'ktele' : keyboard_tele, 'help' : print_args}
+
+if __name__ == "__main__":
+    args = str(sys.argv)
+    if len(args) == 0:
+        args.append('help')
+    
+    ops[args[0]]()

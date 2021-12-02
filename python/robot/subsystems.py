@@ -91,8 +91,10 @@ class Arm(Subsystem):
             if i < len(angles):
                 if angles[i] > max_ang[i]:
                     angles[i] = max_ang[i]
+                    self.integrals[i].set(max_ang[i])
                 elif angles[i] < min_ang[i]:
                     angles[i] = min_ang[i]
+                    self.integrals[i].set(max_ang[i])
                     
                 self.joints[i].set(angles[i])
     

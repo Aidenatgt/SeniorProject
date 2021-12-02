@@ -1,6 +1,7 @@
 from typing import NamedTuple
-from lib.commandlib import Command
+from lib.commandlib import Command, InstantCommand
 from robot.subsystems import Arm
+from lib.keyboard import KeyboardController
 
 class TestCommand(Command):
     def __init__(self, name:str, string:str):
@@ -29,17 +30,16 @@ class SetVelocity(Command):
         self.addRequirements(self.arm)
     
     def start(self):
-        self.arm.setVels({self.axis: self.vel})
-        print("Command: \"{}\" triggered.".format(self.name))
+        if self.axis == 'claw':
+            self.arm.setVels({self.axis: self.vel / 90.0})
+        else:
+            self.arm.setVels({self.axis: self.vel})
     
     def exe(self):
         pass
     
     def end(self, is_interrupted:bool):
         self.arm.setVels({self.axis: 0.0})
-        print("Command: \"{}\" ended.".format(self.name))
-        if is_interrupted:
-            print("The command: \"{}\" was interrupted.".format(self.name))
     
     def isFinished(self):
         return False
@@ -54,16 +54,16 @@ class StopAxis(Command):
     
     def start(self):
         self.arm.setVels({self.axis: 0.0})
-        print("Command: \"{}\" triggered.".format(self.name))
     
     def exe(self):
         pass
     
     def end(self, is_interrupted:bool):
         self.arm.setVels({self.axis: 0.0})
-        print("Command: \"{}\" ended.".format(self.name))
-        if is_interrupted:
-            print("The command: \"{}\" was interrupted.".format(self.name))
     
     def isFinished(self):
         return True
+    
+class ReleaseKeyboard(InstantCommand):
+    def start(self):
+        del KeyboardController.getInstance()

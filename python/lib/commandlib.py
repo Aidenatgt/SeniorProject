@@ -62,6 +62,16 @@ class RunCommand(Command):
     def isFinished(self):
         return False
     
+class InstantCommand(Command):
+    def exe(self):
+        pass
+    
+    def end(self, is_interrupted):
+        pass
+    
+    def isFinished(self):
+        return True
+    
 class Subsystem(ABC, metaclass = ABCMeta):
     periodic_duration = 0.02
     

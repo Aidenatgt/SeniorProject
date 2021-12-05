@@ -33,6 +33,8 @@ class SetVelocity(Command):
             self.arm.setVels({self.axis: self.vel * 90.0})
         else:
             self.arm.setVels({self.axis: self.vel})
+        
+        print("command started")
     
     def exe(self):
         pass

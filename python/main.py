@@ -69,8 +69,11 @@ def keyboard_tele():
 ops = {'ktele' : keyboard_tele, 'help' : print_args}
 
 if __name__ == "__main__":
+    '''
     args = str(sys.argv)
     if len(args) == 0:
         args.append('help')
     
     ops[args[0]]()
+    '''
+    keyboard_tele()
